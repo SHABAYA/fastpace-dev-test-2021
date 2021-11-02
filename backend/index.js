@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000
 const usersController = require('./controllers/users.js');
 const questionsController = require('./controllers/questions.js');
 const answersController = require('./controllers/answers.js')
+const question_user_answerController = require('./controllers/question_user_answer.js')
 
 //DB Connection
 const dbConnection = require('./src/database/connection.js');
@@ -18,6 +19,7 @@ endpoints
 app.use("/users", usersController);
 app.use("/questions", questionsController);
 app.use("/answers", answersController);
+app.use("/question_user_answer", question_user_answerController);
 
     /*
     middleware

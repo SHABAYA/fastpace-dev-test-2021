@@ -48,6 +48,18 @@ const users = await sequelize.query("SELECT * FROM `users`", { type: QueryTypes.
 });
 
 
+router.get('/countAll', async function (req, res) {
+    QuestionsModel.count({})
+        .then(function (count) {
+            console.log(count)
+            res.json({
+                count: count
+            })
+        }).catch((err) => {
+            res.sendStatus(500).statusMessage(err)
+        })
+});
+
 router.get('/:id', async function (req, res) {
     const id = req.params.id;
     var data = {}

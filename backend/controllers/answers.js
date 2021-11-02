@@ -51,6 +51,8 @@ router.get('/:id', async function (req, res) {
     res.status(200)
 });
 
+
+
 router.post('/update/:id', async function (req, res) {
     console.log("choice id is " + req.params.id);
     let request = req.body;

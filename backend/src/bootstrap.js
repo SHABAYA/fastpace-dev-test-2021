@@ -3,6 +3,7 @@ module.exports = async() =>{
     const users = require("./models/user");
     const QuestionsModel = require('../src/models/question');
     const AnswersModel = require('../src/models/answers');
+    const QuestionUserAnswerModel = require('../src/models/question_user_answer');
 
     const errHandler = (err) =>{
     console.error("Error: ", err);
@@ -30,15 +31,26 @@ module.exports = async() =>{
     //   });
 
 
-const { QueryTypes } = require('sequelize');
-const questionAndAnswers = await sequelize.query("SELECT q.*, a.* FROM `questions` as q JOIN `answers` as a ON a.questionId = q.id ORDER BY q.id", { type: QueryTypes.SELECT });
-console.log(questionAndAnswers)
+// const { QueryTypes } = require('sequelize');
+// const questionAndAnswers = await sequelize.query("SELECT q.*, a.* FROM `questions` as q JOIN `answers` as a ON a.questionId = q.id ORDER BY q.id", { type: QueryTypes.SELECT });
+// console.log(questionAndAnswers)
 
 
-QuestionsModel.hasMany(AnswersModel, {foreignKey: 'questionId'})
-AnswersModel.belongsTo(QuestionsModel, {foreignKey: 'questionId'})
+// QuestionsModel.hasMany(AnswersModel, {foreignKey: 'questionId'})
+// AnswersModel.belongsTo(QuestionsModel, {foreignKey: 'questionId'})
 
-QuestionsModel.find({ where: {}, include: [AnswersModel]})
+// QuestionsModel.find({ where: {}, include: [AnswersModel]})
+
+
+    // QuestionUserAnswerModel.count({
+      
+    //   })
+    //   .then(function(count) {
+    //       return count;
+    //   });
+
+
+    
 
 }
 
