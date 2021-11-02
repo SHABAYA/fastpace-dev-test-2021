@@ -2,6 +2,7 @@ const express = require("express");
 const usersModel = require('../src/models/user');
 var bcrypt = require('bcryptjs');
 const Joi = require('@hapi/joi');
+var jwt = require('jsonwebtoken');
 
 
 
@@ -97,18 +98,78 @@ router.post('/delete/:id', async function (req, res) {
 
 router.post("/login", async (req, res) => {
 
+    usersModel.findOne({
+        where: {
+            username: req.body.username
+        }
+    })
+        .then(function (data) {
+            if (!data) {
+                res.json({
+                    responseMessage: 'Invalid username'
+                })
+            }
 
-    const user = await usersModel.findOne({ username: req.body.username });
-    if (!user) return res.status(400).send("username doesn't exists");
+            let user = data.dataValues
+            console.log(user)
+            //compare password here
+            bcrypt.compare(req.body.password, user['password']).then((result) => {
+                // res === true
+                if (result === true) {
+                    let response = {
+                        id: user['id'],
+                        username: user['username'],
+                        firstName: user['firstName'],
+                        lastName: user['lastName'],
+                        mobileNumber: user['mobileNumber'],
+                        email: user['email'],
+                        role: user['role'],
+                    }
+                    //create jwt here
 
+                   var token = jwt.sign({
+                        exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                        data: response
+                      }, 'thebestsecretkeyever');
 
-    const validPass = bcrypt.compare(req.body.password, user.password);
-    if (!validPass) { return res.status(400).send("Invalid password"); }
-    else {
-        res.send("Logged in");
-    }
+                      response['token'] = token;
 
+                      res.json({
+                          ...response
+                      })
+
+                    // jwt.sign({
+                    //     ...response
+                    // }, 'thebestsecretkeyever', { algorithm: 'RS256', expiresIn: '2h' }, function (err, token) {
+                    //     console.log(token);
+
+                    //     if(undefined == token){
+                    //         res.status(500).json({
+                    //             responseMessage: err
+                    //         })
+                    //     }
+                    //     response['token'] = token;
+
+                    //     res.json({
+                    //         ...response
+                    //     })
+                    // });
+
+                } else {
+                    res.json({
+                        responseMessage: 'Invalid username or password'
+                    })
+                }
+            });
+        }).catch((err) => {
+            res.sendStatus(500).statusMessage(err)
+        });
 });
+
+
+
+// AUTHENTICATION
+
 
 module.exports = router;
 

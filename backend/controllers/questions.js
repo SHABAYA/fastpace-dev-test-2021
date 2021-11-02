@@ -1,6 +1,7 @@
 const express = require("express");
 const QuestionsModel = require('../src/models/question');
 const AnswersModel = require('../src/models/answers');
+var jwt = require('jsonwebtoken');
 //var db = require('../index')
 
 
@@ -18,7 +19,23 @@ router.use(express.urlencoded({
 
 router.post('/add', function (req, res) {
     let request = req.body
-    console.log('request received');
+    let token = req.headers.authorization
+    console.log('token : ' + token);
+    if (!req.headers.authorization) {
+        return res.status(403).json({ error: 'No credentials sent!' });
+    }
+    try {
+        var decoded = jwt.verify(token, 'thebestsecretkeyever');
+        console.log(decoded['data'])
+        let jwtData = decoded['data'];
+        if(jwtData['role']!=='Admin'){
+            return res.status(403).json({ error: 'Insufficient access.' });
+        }
+    } catch (err) {
+        console.log(err) // bar
+        return res.status(403).json({ ...err });
+    }
+
     let id = new Date().getTime();
     QuestionsModel.create({
         id: id,
@@ -37,9 +54,9 @@ router.get('/all', async function (req, res) {
     var data = {}
 
     const { QueryTypes } = require('sequelize');
-const users = await sequelize.query("SELECT * FROM `users`", { type: QueryTypes.SELECT });
+    const users = await sequelize.query("SELECT * FROM `users`", { type: QueryTypes.SELECT });
     questions.forEach(question => {
-        
+
     });
 
     res.setHeader('Content-Type', 'application/json');
@@ -92,6 +109,25 @@ router.get('/:id', async function (req, res) {
 router.post('/update/:id', async function (req, res) {
     console.log("choice id is " + req.params.id);
     let request = req.body;
+
+    let token = req.headers.authorization
+    console.log('token : ' + token);
+    if (!req.headers.authorization) {
+        return res.status(403).json({ error: 'No credentials sent!' });
+    }
+    try {
+        var decoded = jwt.verify(token, 'thebestsecretkeyever');
+        console.log(decoded['data'])
+        let jwtData = decoded['data'];
+        if(jwtData['role']!=='Admin'){
+            return res.status(403).json({ error: 'Insufficient access.' });
+        }
+    } catch (err) {
+        console.log(err) // bar
+        return res.status(403).json({ ...err });
+    }
+
+
     const id = req.params.id;
     await QuestionsModel.update({
         qIndex: request['qIndex'],
@@ -109,6 +145,25 @@ router.post('/update/:id', async function (req, res) {
 
 router.post('/delete/:id', async function (req, res) {
     console.log("choice id is " + req.params.id);
+
+    let token = req.headers.authorization
+    console.log('token : ' + token);
+    if (!req.headers.authorization) {
+        return res.status(403).json({ error: 'No credentials sent!' });
+    }
+    try {
+        var decoded = jwt.verify(token, 'thebestsecretkeyever');
+        console.log(decoded['data'])
+        let jwtData = decoded['data'];
+        if(jwtData['role']!=='Admin'){
+            return res.status(403).json({ error: 'Insufficient access.' });
+        }
+    } catch (err) {
+        console.log(err) // bar
+        return res.status(403).json({ ...err });
+    }
+
+
     const id = req.params.id;
     await QuestionsModel.destroy({
         where: {
