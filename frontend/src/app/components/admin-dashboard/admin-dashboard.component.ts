@@ -11,7 +11,7 @@ import { BackendService } from 'src/app/services/backend.service';
 export class AdminDashboardComponent implements OnInit {
 
   public totalQuestions: number = 0;
-  public user:any;
+  public question:any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -19,20 +19,20 @@ export class AdminDashboardComponent implements OnInit {
     private router: Router,
     private backendService: BackendService,
   ) { 
-    this.user =  JSON.parse(localStorage.getItem('user')|| '{}');
+    this.question =  JSON.parse(localStorage.getItem('question')|| '{}');
 
-    if(undefined == this.user.token){
-      this.router.navigate(['/login'], { queryParams: {}, skipLocationChange: false });
-    }
+    // if(undefined == this.question.token){
+    //   this.router.navigate(['/login'], { queryParams: {}, skipLocationChange: false });
+    // }
 
   }
 
   ngOnInit(): void {
-    this.getTotalQuestionAnsweredByUser(this.user.id);
+    this.getTotalQuestions();
   }
 
-  getTotalQuestionAnsweredByUser(userId:string){
-    this.backendService.getTotalAnswered(userId).
+  getTotalQuestions(){
+    this.backendService.getTotalQuestions().
     subscribe({
       next:(response)=>{
         this.totalQuestions = response.count
