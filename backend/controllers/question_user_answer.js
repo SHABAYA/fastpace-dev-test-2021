@@ -136,28 +136,27 @@ router.get('/countByUser/:id', async function (req, res) {
         var decoded = jwt.verify(token, 'thebestsecretkeyever');
         console.log(decoded['data'])
         let jwtData = decoded['data'];
-        if(jwtData['role']!=='Admin'){
-            return res.status(403).json({ error: 'Insufficient access.' });
-        }
+
+        const id = req.params.id;
+        QuestionUserAnswerModel.count({
+            where: {
+                userId: id
+            }
+        })
+            .then(function (count) {
+                console.log(count)
+                res.json({
+                    count: count
+                })
+            }).catch((err) => {
+                res.sendStatus(500).statusMessage(err)
+            })
     } catch (err) {
         console.log(err) // bar
         return res.status(403).json({ ...err });
     }
 
-    const id = req.params.id;
-    QuestionUserAnswerModel.count({
-        where: {
-            userId: id
-        }
-    })
-        .then(function (count) {
-            console.log(count)
-            res.json({
-                count: count
-            })
-        }).catch((err) => {
-            res.sendStatus(500).statusMessage(err)
-        })
+   
 });
 
 

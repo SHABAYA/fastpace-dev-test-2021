@@ -1,0 +1,9 @@
+mat-card{
+    width: 40%;
+    height: 150px;
+    float: left;
+    margin-left: 20px;
+    text-align: center;
+    margin: 20px 20px 0 50px;
+}
+

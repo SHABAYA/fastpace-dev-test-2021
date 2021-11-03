@@ -37,10 +37,36 @@ router.post('/add', function (req, res) {
             mobileNumber: request['mobileNumber'],
             email: request['email'],
             role: request['role']
-        }).catch(errHandler);
+        }).then(function (data) {
+            if (!data) {
+                return res.json({
+                    responseMessage: 'An error occured'
+                })
+            } else {
 
-        res.status(200)
-        res.send('success')
+                let user = data.dataValues
+                console.log(user)
+                let response = {
+                    id: user['id'],
+                    username: user['username'],
+                    firstName: user['firstName'],
+                    lastName: user['lastName'],
+                    mobileNumber: user['mobileNumber'],
+                    email: user['email'],
+                    role: user['role'],
+                }
+
+                var token = jwt.sign({
+                    exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                    data: response
+                }, 'thebestsecretkeyever');
+
+                response['token'] = token;
+                return res.status(200).json({ ...response });
+            }
+
+        })
+            .catch(errHandler);
     });
 });
 
@@ -127,16 +153,16 @@ router.post("/login", async (req, res) => {
                     }
                     //create jwt here
 
-                   var token = jwt.sign({
+                    var token = jwt.sign({
                         exp: Math.floor(Date.now() / 1000) + (60 * 60),
                         data: response
-                      }, 'thebestsecretkeyever');
+                    }, 'thebestsecretkeyever');
 
-                      response['token'] = token;
+                    response['token'] = token;
 
-                      res.json({
-                          ...response
-                      })
+                    res.json({
+                        ...response
+                    })
 
                     // jwt.sign({
                     //     ...response

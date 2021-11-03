@@ -1,5 +1,5 @@
 {
-    "name": "233bite-api",
+    "name": "qst-ans-api",
     "version": "1.0.0",
     "description": "light weight backend for 233bite",
     "main": "index.js",

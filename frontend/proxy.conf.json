@@ -1,0 +1,22 @@
+{
+    "/users/login": {
+        "target": "http://localhost:3000",
+        "secure": false
+    },
+
+    "/users/add": {
+        "target": "http://localhost:3000",
+        "secure": false
+    },
+
+    "/question_user_answer/countByUser":{
+        "target":"http://localhost:3000",
+        "secure":false
+    },
+    
+    "/questions/countAll":{
+        "target":"http://localhost:3000",
+        "secure":false
+    }
+}
+

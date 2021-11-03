@@ -1,0 +1,16 @@
+.card{
+    border: none;
+    width: 500px;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -30%);
+    background: #0f172a;
+}
+
+.card, label h1 h5{
+    font-family: sans-serif;
+    color: #fff;
+}
+
