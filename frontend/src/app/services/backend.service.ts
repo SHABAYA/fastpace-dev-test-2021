@@ -55,7 +55,7 @@ export class BackendService {
   }
 
   getTotalQuestions(): Observable<any> {
-    let user =  JSON.parse(localStorage.getItem('user')|| '{}');
+    let user =  JSON.parse(localStorage.getItem('question')|| '{}');
     const httpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
       'Cache-Control': 'no-cache',
